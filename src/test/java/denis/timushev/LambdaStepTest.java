@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static io.qameta.allure.Allure.step;
 import static org.openqa.selenium.By.linkText;
 import static org.openqa.selenium.By.partialLinkText;
 
@@ -17,7 +18,9 @@ import static org.openqa.selenium.By.partialLinkText;
 @Feature("Задачи")
 @Story("Просмотр задач")
 @DisplayName("Тест Issue")
-public class SelenideTestAndListener {
+public class LambdaStepTest {
+
+    private static final String REPOSITORY = "City-of-Helsinki/hel-icons";
 
     @Test
     public void searchIssie() {
@@ -25,13 +28,13 @@ public class SelenideTestAndListener {
         Allure.parameter("Город", "Хельсинки");
         SelenideLogger.addListener("allure", new AllureSelenide());
 
-        open("https://github.com/");
-
-        $(".header-search-input").click();
-        $(".header-search-input").sendKeys("City-of-Helsinki/hel-icons");
-        $(".header-search-input").submit();
-        $(linkText("City-of-Helsinki/hel-icons")).click();
-        $(partialLinkText("Issues")).click();
-        $(withText("#1")).click();
+        step("Открываем страницу", () -> {
+            open("https://github.com");
+        });
+        step("Ищем" + REPOSITORY, () -> {
+            $(".header-search-input").click();
+            $(".header-search-input").sendKeys(REPOSITORY);
+            $(".header-search-input").submit();
+        });
     }
 }
