@@ -1,10 +1,13 @@
 package denis.timushev;
 
+import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.*;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.nio.charset.StandardCharsets;
 
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.$;
@@ -45,6 +48,12 @@ public class LambdaStepTestAndListener {
         });
         step("Проверка номера Issue " + ISSUE_NUMBER, () -> {
             $(withText("#1")).click();
+            Allure.getLifecycle().addAttachment(
+                    "Исходники страницы",
+                    "text/html",
+                    "html",
+                    WebDriverRunner.getWebDriver().getPageSource().getBytes(StandardCharsets.UTF_8)
+            );
         });
     }
 }
